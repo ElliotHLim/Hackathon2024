@@ -2,17 +2,16 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Circle from './Circle';
 import ColorHash from 'color-hash';
+import { Result } from '../types';
 
-const SpiritualHealthScreen = ({ score = 60, title }) => { // default score for demo
+const SpiritualHealthScreen = ( result: Result ) => { // default score for demo
   var colorHash = new ColorHash({lightness: 0.3, hue: {min: 180, max: 280}});
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Results</Text>
-      <Circle score={score} color={title ? colorHash.hex(title) : undefined}/>
-      
+      <Circle score={result.score} color={result.question.question ? colorHash.hex(result.question.question) : undefined}/>
       <Text style={styles.subtitle}>Your spiritual health score</Text>
-      
       <Text style={styles.arrow}>⌄</Text>
     </View>
   );

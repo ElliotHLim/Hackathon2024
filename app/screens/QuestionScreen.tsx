@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import QuestionComponent from '../components/QuestionComponent';
-import { Question, Result, Results } from '../types';
+import { Category, Question, Result, Results } from '../types';
 import { questions } from '../data/QuestionList';
 
 const submitAnswer = (question: Question, answer: number) => {
@@ -26,7 +26,29 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Re
             if (currentQuestionIndex < questions.length - 1) {
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
             } else {
-                questionsFinished({ results: results, date: new Date().toISOString() });
+                const categoryScores = {
+                    [Category.serviceAndSacrifice]: 0,
+                    [Category.spiritualPractices]: 0,
+                    [Category.emotionalHealth]: 0,
+                    [Category.alignmentWithGodsHeart]: 0,
+                    [Category.community]: 0,
+                }
+                results.forEach(result => {
+                    categoryScores[result.question.category] += result.score;
+                });
+                categoryScores[Category.serviceAndSacrifice] /= questions.filter(question => question.category === Category.serviceAndSacrifice).length;
+                const res: Results = {
+                    results: results,
+                    date: new Date().toISOString(),
+                    serviceAndSacrifice: categoryScores[Category.serviceAndSacrifice],
+                    spiritualPractices: categoryScores[Category.spiritualPractices],
+                    emotionalHealth: categoryScores[Category.emotionalHealth],
+                    alignmentWithGodsHeart: categoryScores[Category.alignmentWithGodsHeart],
+                    community: categoryScores[Category.community],
+                };
+                questionsFinished(
+                    res
+                );
              }
         };
 
