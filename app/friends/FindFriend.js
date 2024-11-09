@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { View, TextInput, Button, FlatList, Text, StyleSheet } from 'react-native';
-import { FIRESTORE_DB, FIREBASE_AUTH } from '../FirebaseConfig';
+import { FIRESTORE_DB, FIREBASE_AUTH } from '../../FirebaseConfig';
 import { collection, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 
 export default function FindFriend() {
