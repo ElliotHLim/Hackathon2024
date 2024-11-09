@@ -6,9 +6,10 @@ import { Assessment } from '../types';
 
 // create multiple sprituial health screens, each with data from an array
 // should scroll right to left, each result screen should be one full screen
-const Results = (assessment: Assessment) => {
+const Results = ( {assessment} ) => {
     console.log(assessment);
     const { serviceAndSacrifice, spiritualPractices, emotionalHealth, alignmentWithGodsHeart, community, overall } = assessment;
+    console.log(serviceAndSacrifice, spiritualPractices, emotionalHealth, alignmentWithGodsHeart, community, overall);
     return (
 
         <ScrollView style={styles.container} horizontal pagingEnabled>
