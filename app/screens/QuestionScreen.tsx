@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import QuestionComponent from '../components/QuestionComponent';
-import { Category, Question, Result, Results } from '../types';
+import { Category, Question, Result, Assessment } from '../types';
 import { questions } from '../data/QuestionList';
 
 const createResult = (question: Question, answer: number): Result => {
@@ -15,7 +15,7 @@ const createResult = (question: Question, answer: number): Result => {
 }
 
 // create a question screen that will display one question at a time. The user should be able to answer the question and submit the answer. The parent component should be able to access the answer
-const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Results) => any }) => {
+const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Assessment) => any }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
     const [results, setResults] = useState<Result[]>([]);
@@ -38,7 +38,7 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Re
                 question => question.category === Category.serviceAndSacrifice
             ).length;
 
-            const res: Results = {
+            const res: Assessment = {
                 results: results,
                 date: new Date().toISOString(),
                 serviceAndSacrifice: categoryScores[Category.serviceAndSacrifice],

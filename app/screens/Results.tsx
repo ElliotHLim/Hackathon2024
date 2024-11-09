@@ -1,46 +1,35 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Dimensions } from 'react-native';
 import SpiritualHealthScreen from '../components/SpiritualHealthScreen';
+import { Assessment } from '../types';
 
 
 // create multiple sprituial health screens, each with data from an array
-
-type ResultsResponse = {
-    title: string;
-    score: number;
-};
-
-type ResultsResponseCollection = {
-    results: ResultsResponse[];
-    date: string;
-}
-
-// dummy data
-const dummyResults: ResultsResponse[] = [
-    {
-        title: 'Spiritual Health',
-        score: 60,
-    },
-    {
-        title: 'Physical Health',
-        score: 80,
-    },
-    {
-        title: 'Mental Health',
-        score: 70,
-    },
-];
-
 // should scroll right to left, each result screen should be one full screen
-const Results = ({ results = dummyResults }: ResultsResponseCollection) => {
+const Results = (assessment: Assessment) => {
+    console.log(assessment);
+    const { serviceAndSacrifice, spiritualPractices, emotionalHealth, alignmentWithGodsHeart, community, overall } = assessment;
     return (
 
         <ScrollView style={styles.container} horizontal pagingEnabled>
-            {results.map((result, index) => (
-                <View style={styles.page} key={index}>
-                    <SpiritualHealthScreen score={result.score} title={result.title} />
+                <View style={styles.page} key={0}>
+                    <SpiritualHealthScreen category="Service and Sacrifice" score={serviceAndSacrifice} />
                 </View>
-            ))}
+                <View style={styles.page} key={1}>
+                    <SpiritualHealthScreen category="Spiritual Practices" score={spiritualPractices} />
+                </View>
+                <View style={styles.page} key={2}>
+                    <SpiritualHealthScreen category="Emotional Health" score={emotionalHealth} />
+                </View>
+                <View style={styles.page} key={3}>
+                    <SpiritualHealthScreen category="Alignment With God's Heart" score={alignmentWithGodsHeart} />
+                </View>
+                <View style={styles.page} key={4}>
+                    <SpiritualHealthScreen category="Community" score={community} />
+                </View>
+                <View style={styles.page} key={5}>
+                    <SpiritualHealthScreen category="Overall" score={overall} />
+                </View>
         </ScrollView>
     );
 };

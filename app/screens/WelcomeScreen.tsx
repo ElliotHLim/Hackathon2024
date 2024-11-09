@@ -4,7 +4,7 @@ import { WelcomeMessage } from "../components/WelcomeMessage";
 import { AppButton } from "../components/AppButton";
 
 interface WelcomeScreenProps {
-  appName?: string;  // name of the app
+  appName?: string;  // Made optional with default value in component
   navigation: any;
 }
 
