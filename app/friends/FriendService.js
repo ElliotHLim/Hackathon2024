@@ -1,5 +1,5 @@
-import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { FIREBASE_AUTH, FIREBASE_APP, FIRESTORE_DB } from '../../FirebaseConfig';
+import { doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIRESTORE_DB } from '../../FirebaseConfig';
 
 // Function to add a friend to the user's friend list
 export const addFriend = async (currentUserId, friendId) => {
