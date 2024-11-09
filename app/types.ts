@@ -17,7 +17,7 @@ export type Result = {
     score: number;
 };
 
-export type Results = {
+export type Assessment = {
     results: Result[];
     serviceAndSacrifice: number;
     spiritualPractices: number;
