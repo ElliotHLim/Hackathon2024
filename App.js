@@ -110,10 +110,12 @@ export default function App() {
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
+          <>
           <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
-          // <Stack.Screen name="Questions">
-          //   {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
-          // </Stack.Screen>
+          <Stack.Screen name="Questions">
+            {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
+          </Stack.Screen>
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer> 
