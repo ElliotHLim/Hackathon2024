@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import List from './app/screens/List'; 
-import Details from './app/screens/'; 
+import Details from './app/screens/Details'; 
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 
@@ -23,9 +23,9 @@ function InsideLayout() {
 }
 
 export default function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = React.useState(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       console.log('user', user); 
       setUser(user);
