@@ -3,6 +3,7 @@ import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';  // Make sure to import Firebase authentication
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { AppButton } from "../components/AppButton";
 
 const Login = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
@@ -25,7 +26,7 @@ const Login = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <Text>Login Screen</Text>
+      <Text style={styles.messageText}>Please enter your email and password.</Text>
       <TextInput
         placeholder="Email"
         style={styles.input}
@@ -40,10 +41,15 @@ const Login = ({ navigation }: any) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-      <Button
-        title="Go to Register"
-        onPress={() => navigation.navigate('Register')}
+      <AppButton 
+        variant='primary'
+        text="Login" 
+        onPress={handleLogin} 
+      />
+      <AppButton 
+        variant='secondary'
+        text="Create an Account"
+        onPress={() => navigation.navigate('Register')} 
       />
     </View>
   );
@@ -55,6 +61,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 16,
+  },
+  messageText: {
+    fontSize: 16,
+    marginBottom: 16,
   },
   input: {
     width: '80%',

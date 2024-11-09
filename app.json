@@ -31,6 +31,12 @@
     "fonts": [
       {
         "asset": "./assets/fonts/Satoshi/Satoshi-Regular.otf"
+      },
+      {
+        "asset": "./assets/fonts/Satoshi/Satoshi-Black.otf"
+      },
+      {
+        "asset": "./assets/fonts/Satoshi/Satoshi-Bold.otf"
       }
     ],
     "plugins": [

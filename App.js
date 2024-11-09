@@ -21,7 +21,13 @@ import * as Font from 'expo-font';
 import AddFriend from './app/friends/AddFriend';
 import FriendsList from './app/friends/FriendsList';
 import FindFriend from './app/friends/FindFriend';
-import Results from './app/screens/Results'; // Ensure you import Results here
+import * as Font from 'expo-font';
+import { doc, setDoc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
+import AddFriend from './app/friends/AddFriend'
+import PastResults from './app/screens/PastResults';
+import Results from './app/screens/Results';
+import { ReflectScreen } from './app/screens/ReflectScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,6 +44,11 @@ function InsideLayout({ assessment }) {
       <InsideStack.Screen name="Results">
         {(props) => <Results {...props} assessment={assessment} />}
       </InsideStack.Screen>
+      <InsideStack.Screen name="PastResults" component={PastResults} />
+
+      {/* <InsideStack.Screen name="Add Friends" component={AddFriend} />
+      <InsideStack.Screen name="Friends List" component={FriendsList} />
+    <InsideStack.Screen name="Find Friend" component={FindFriend} /> */}
     </InsideStack.Navigator>
   );
 }
@@ -52,6 +63,8 @@ export default function App() {
       try {
         await Font.loadAsync({
           'Satoshi-Regular': require('./assets/fonts/Satoshi/Satoshi-Regular.otf'),
+          'Satoshi-Bold': require('./assets/fonts/Satoshi/Satoshi-Bold.otf'),
+          'Satoshi-Black': require('./assets/fonts/Satoshi/Satoshi-Black.otf'),
         });
         setFontsLoaded(true);
       } catch (error) {
@@ -92,16 +105,20 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
         {user ? (
-          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
+          <Stack.Screen name="Inside"  options={{ headerShown: false }}>
+            {props => <InsideLayout {...props} assessment={answeredQuestions} />}
+          </Stack.Screen>
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
           <>
-            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Questions">
-              {(props) => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
-            </Stack.Screen>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
+          <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Reflect" component={ReflectScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Questions">
+            {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
+          </Stack.Screen>
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
           </>
         )}
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
