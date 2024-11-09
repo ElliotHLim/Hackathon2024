@@ -4,19 +4,54 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
 import Login from './app/screens/Login';
+import List from './app/screens/List'; 
+import Details from './app/screens/'; 
+import { onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from './FirebaseConfig';
 
 const Stack = createNativeStackNavigator();
 
+const InsideStack = createNativeStackNavigator();
+function InsideLayout() {
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="My todos" component={List} />
+      <InsideStack.Screen name="Details" component={Details} />
+    </InsideStack.Navigator>
+  );
+}
+
 export default function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log('user', user); 
+      setUser(user);
+    });
+
+    return () => unsubscribe(); // Clean up the subscription
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        {/* <Stack.Screen name="Details" component={DetailsScreen} /> */}
+        {user ? (
+          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
+        ) : (
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+});
