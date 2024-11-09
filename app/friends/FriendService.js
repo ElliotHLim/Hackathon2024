@@ -1,33 +1,41 @@
-import { doc, setDoc, updateDoc, arrayUnion, getDoc, Timestamp } from 'firebase/firestore';
-import { FIREBASE_FIRESTORE } from './FirebaseConfig';
+import { doc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_APP, FIRESTORE_DB } from '../../FirebaseConfig';
 
-// Add a new user to Firestore
-export const createUserProfile = async (uid, username) => {
-  const userDoc = doc(FIREBASE_FIRESTORE, 'users', uid);
-  await setDoc(userDoc, {
-    username,
-    created: Timestamp.now(),
-    friends: [],
-  });
-};
-
-// Add a friend
-export const addFriend = async (userId, friendId) => {
-  const userDocRef = doc(FIREBASE_FIRESTORE, 'users', userId);
-  const friendDocRef = doc(FIREBASE_FIRESTORE, 'users', friendId);
-
-  // Get friend's data to store in the user's friends list
-  const friendDoc = await getDoc(friendDocRef);
-  if (friendDoc.exists()) {
-    const friendData = friendDoc.data();
-    await updateDoc(userDocRef, {
-      friends: arrayUnion({ uid: friendId, username: friendData.username }),
+// Function to add a friend to the user's friend list
+export const addFriend = async (currentUserId, friendId) => {
+  try {
+    // Reference to the current user's document
+    const userRef = doc(FIRESTORE_DB, 'users', currentUserId);
+    // Update the current user's friends list by adding the friend's UID
+    await updateDoc(userRef, {
+      friends: arrayUnion(friendId),  // This adds friendId to the 'friends' array
     });
+    
+    // Optionally, you can do the same on the friend's document to ensure mutual friendship
+    const friendRef = doc(FIRESTORE_DB, 'users', friendId);
+    await updateDoc(friendRef, {
+      friends: arrayUnion(currentUserId),  // This ensures the friend adds the current user
+    });
+    
+    console.log('Friend added successfully');
+  } catch (error) {
+    throw new Error('Error adding friend: ' + error.message);
   }
 };
 
-// Get a user's friends
+// Function to get the friends list of a user
 export const getFriends = async (userId) => {
-  const userDoc = await getDoc(doc(FIREBASE_FIRESTORE, 'users', userId));
-  return userDoc.exists() ? userDoc.data().friends : [];
+  try {
+    const userRef = doc(FIRESTORE_DB, 'users', userId);
+    const userDoc = await getDoc(userRef);
+    if (userDoc.exists()) {
+      const friendsList = userDoc.data().friends || [];
+      return friendsList;
+    } else {
+      throw new Error('User not found');
+    }
+  } catch (error) {
+    console.error('Error fetching friends:', error);
+    throw error;
+  }
 };

@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import { addFriend, getFriends } from './FriendService';
-import { FIREBASE_AUTH } from './FirebaseConfig';
+import { FIREBASE_AUTH, FIRESTORE_DB } from '../../FirebaseConfig';  // Adjust the import path
 
 const AddFriend = () => {
   const [friendId, setFriendId] = useState('');
   const [friendsList, setFriendsList] = useState([]);
   const currentUser = FIREBASE_AUTH.currentUser;
 
+  useEffect(() => {
+    if (currentUser) {
+      fetchFriendsList(); // Load the friends list when the component mounts
+    }
+  }, [currentUser]);
+
   const handleAddFriend = async () => {
     if (!friendId) return alert('Please enter a friend ID');
     try {
       await addFriend(currentUser.uid, friendId);
       alert('Friend added successfully!');
-      fetchFriendsList(); // Update friends list after adding
+      fetchFriendsList(); // Refresh the friends list after adding
     } catch (error) {
       console.error('Error adding friend:', error);
       alert('Error adding friend: ' + error.message);
@@ -21,8 +27,13 @@ const AddFriend = () => {
   };
 
   const fetchFriendsList = async () => {
-    const friends = await getFriends(currentUser.uid);
-    setFriendsList(friends);
+    try {
+      const friends = await getFriends(currentUser.uid);
+      setFriendsList(friends);
+    } catch (error) {
+      console.error('Error fetching friends list:', error);
+      alert('Error fetching friends list: ' + error.message);
+    }
   };
 
   return (
@@ -36,11 +47,16 @@ const AddFriend = () => {
       <Button title="Add Friend" onPress={handleAddFriend} />
 
       <Text style={styles.heading}>Friends List:</Text>
-      {friendsList.map((friend, index) => (
-        <Text key={index} style={styles.friendItem}>
-          {friend.username} (ID: {friend.uid})
-        </Text>
-      ))}
+      {friendsList.length > 0 ? (
+        friendsList.map((friend, index) => (
+          <Text key={index} style={styles.friendItem}>
+            {friend}  {/* Assuming friend is the UID, you can extend this with more user info */}
+          </Text>
+        ))
+      ) : (
+        <Text>No friends yet.</Text>
+      )}
+
       <Button title="Refresh Friends List" onPress={fetchFriendsList} />
     </View>
   );
