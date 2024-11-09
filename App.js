@@ -10,6 +10,7 @@ import List from './app/screens/List'; // Ensure path is correct
 import Details from './app/screens/Details'; // Ensure path is correct
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
+import QuestionScreen from './app/screens/QuestionScreen';
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
@@ -26,20 +27,25 @@ function InsideLayout() {
 
 export default function App() {
   const [user, setUser] = useState(null); // Initialize without User reference
-  const [loading, setLoading] = useState(true); // Track loading state
+  const [answeredQuestions, setAnsweredQuestions] = useState(null); // is type Results
+
+  useEffect(() => {
+    console.log('answeredQuestions', answeredQuestions);
+  }, [answeredQuestions]);
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
-      setLoading(false); // Stop loading once user state is determined
+      if (answeredQuestions && user) {
+        console.log('answeredQuestions', answeredQuestions);
+        // add new user results to firebase (results table)
+      }
     });
 
     return () => unsubscribe(); // Clean up subscription on unmount
   }, []);
 
-  if (loading) {
-    return <ActivityIndicator size="large" style={styles.loading} />; // Show loading indicator while checking auth state
-  }
+  // user flow is questions first, then login
 
   return (
     <NavigationContainer>
@@ -47,20 +53,12 @@ export default function App() {
         {user ? (
           // If user is logged in, show the authenticated user flow (InsideLayout)
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
+        ) : answeredQuestions ? (
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
-          // If user is not logged in, show Login and Register screens
-          <>
-            <Stack.Screen 
-              name="Login" 
-              component={Login} 
-              options={{ headerShown: false }} 
-            />
-            <Stack.Screen 
-              name="Register" 
-              component={Register} 
-              options={{ headerShown: false }} 
-            />
-          </>
+          <Stack.Screen name="Questions">
+            {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
+          </Stack.Screen>
         )}
       </Stack.Navigator>
     </NavigationContainer>
