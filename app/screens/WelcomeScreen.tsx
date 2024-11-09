@@ -5,15 +5,16 @@ import { GetStartedButton } from "../components/GetStartedButton";
 
 interface WelcomeScreenProps {
   appName?: string;  // Made optional with default value in component
+  navigation: any;
 }
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ appName = "Spirit Track" }) => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ appName = "Spirit Track", navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.welcomeText}>Welcome.</Text>
         <WelcomeMessage appName={appName} />
-        <GetStartedButton onPress={() => console.log('Get Started pressed')} />
+        <GetStartedButton onPress={() => navigation.navigate('Questions')} />
       </View>
     </View>
   );

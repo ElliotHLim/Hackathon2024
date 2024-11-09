@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
+import Results from './app/screens/Results';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -23,11 +24,12 @@ import AddFriend from './app/friends/AddFriend';
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
 
-function InsideLayout() {
+// InsideLayout for authenticated users
+function InsideLayout(assessment) {
+  console.log('assessment', assessment);
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="Main Pages" component={List} />
-      <InsideStack.Screen name="Add Friends" component={Details} />
       <InsideStack.Screen name="Details" component={Details} />
       <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Friends List" component={FriendsList} />
@@ -35,6 +37,7 @@ function InsideLayout() {
     </InsideStack.Navigator>
   );  
 }
+
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -63,9 +66,9 @@ export default function App() {
 
   // Second useEffect for user and assessment handling
   useEffect(() => {
-    console.log('user', user);
+    // console.log('user', user);
     if (answeredQuestions && user) {
-      console.log('answeredQuestions', answeredQuestions, 'user', user);
+      // console.log('answeredQuestions', answeredQuestions, 'user', user);
       // add new user results to firebase (results table)
       const db = FIRESTORE_DB;
       const assessmentRef = doc(db, 'assessments', uuidv4());
@@ -80,10 +83,6 @@ export default function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
-      if (answeredQuestions && user) {
-        console.log('answeredQuestions', answeredQuestions);
-        // add new user results to firebase (results table)
-      }
     });
 
     return () => unsubscribe(); // Clean up subscription on unmount
@@ -100,22 +99,28 @@ export default function App() {
 
   // Main app render
   return (
-    <WelcomeScreen />
-    /* <NavigationContainer>
+    // <WelcomeScreen />
+    <NavigationContainer>
       <Stack.Navigator>
         {user ? (
-          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
+          // If user is authenticated, show InsideLayout
+          <Stack.Screen name="Inside">
+            {props => <InsideLayout {...props} assessment={answeredQuestions} />}
+          </Stack.Screen>
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
+          <>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
           <Stack.Screen name="Questions">
             {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
           </Stack.Screen>
+          </>
         )}
       </Stack.Navigator>
-    </NavigationContainer> */
+    </NavigationContainer> 
   );
-
+}
 
 const styles = StyleSheet.create({
   loading: {

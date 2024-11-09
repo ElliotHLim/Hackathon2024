@@ -17,7 +17,6 @@ const Login = ({ navigation }: any) => {
     try {
       await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
       // After successful login, navigate to the Home screen (or another screen)
-      navigation.navigate('Home');
     } catch (error) {
       console.error('Error logging in:', error);
       Alert.alert('Login Failed', error.message);
