@@ -1,20 +1,24 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { WelcomeMessage } from "../components/WelcomeMessage";
-import { GetStartedButton } from "../components/GetStartedButton";
+import { AppButton } from "../components/AppButton";
 
 interface WelcomeScreenProps {
   appName?: string;  // Made optional with default value in component
   navigation: any;
 }
 
-export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ appName = "Spirit Track", navigation }) => {
+export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ appName = "Waypoint", navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.welcomeText}>Welcome.</Text>
         <WelcomeMessage appName={appName} />
-        <GetStartedButton onPress={() => navigation.navigate('Questions')} />
+        <AppButton 
+          text="I want to get started" 
+          onPress={() => navigation.navigate('Name')} 
+          align="center"
+        />
       </View>
     </View>
   );

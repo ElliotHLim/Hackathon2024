@@ -1,15 +1,27 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 
-interface GetStartedButtonProps {
+interface AppButtonProps {
   onPress: () => void;
+  text: string;
+  align?: "center" | "right";
 }
 
-export const GetStartedButton: React.FC<GetStartedButtonProps> = ({ onPress }) => {
+export const AppButton: React.FC<AppButtonProps> = ({ 
+  onPress, 
+  text = "I want to get started",  // Default text
+  align = 'center'  // Default alignment
+}) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity 
+      style={[
+        styles.button, 
+        align === 'right' ? styles.alignRight : styles.alignCenter
+      ]} 
+      onPress={onPress}
+    >
       <View style={styles.buttonContent}>
-        <Text style={styles.buttonText}>I want to get started</Text>
+        <Text style={styles.buttonText}>{text}</Text>
         <Text style={styles.arrow}>→</Text>
       </View>
     </TouchableOpacity>
@@ -22,8 +34,8 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#658755', // Green
     borderRadius: 8,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -32,6 +44,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  alignCenter: {
+    alignSelf: 'center',
+  },
+  alignRight: {
+    alignSelf: 'flex-end',
   },
   buttonContent: {
     flexDirection: 'row',

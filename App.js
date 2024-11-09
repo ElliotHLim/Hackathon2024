@@ -4,12 +4,18 @@ import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from './FirebaseConfig';
+
+//screens
+import QuestionScreen from './app/screens/QuestionScreen';
+import { WelcomeScreen } from './app/screens/WelcomeScreen';
+import { NameScreen } from './app/screens/NameScreen';
 import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
-import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
 import FriendsList from './app/friends/FriendsList';
@@ -17,19 +23,28 @@ import FindFriend from './app/friends/FindFriend';
 import * as Font from 'expo-font';
 import { doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import AddFriend from './app/friends/AddFriend';
+import AddFriend from './app/friends/AddFriend'
+import FriendsList from './app/friends/FriendsList'
+import FindFriend from './app/friends/FindFriend'
+
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
 
-function InsideLayout() {
+// InsideLayout for authenticated users
+function InsideLayout(props1) {
+  console.log('assessment insidelayout', props1.assessment);
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="Main Pages" component={List} />
-      <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Details" component={Details} />
+      <InsideStack.Screen name="Results">
+        {props => <Results {...props} assessment={props1.assessment} />}
+      </InsideStack.Screen>
+
+      {/* <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Friends List" component={FriendsList} />
-      <InsideStack.Screen name="Find Friend" component={FindFriend} />
+    <InsideStack.Screen name="Find Friend" component={FindFriend} /> */}
     </InsideStack.Navigator>
   );
 }
@@ -82,12 +97,15 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Welcome">
         {user ? (
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
+          <>
+          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
+          <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Questions">
             {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
           </Stack.Screen>
