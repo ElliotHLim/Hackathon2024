@@ -6,10 +6,9 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from './FirebaseConfig';
+import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
 
 //screens
-import QuestionScreen from './app/screens/QuestionScreen';
 import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import { NameScreen } from './app/screens/NameScreen';
 import HomeScreen from './pages/HomeScreen';
@@ -18,9 +17,7 @@ import Register from './app/screens/Register';
 import Results from './app/screens/Results';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
-import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
-import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
