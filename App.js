@@ -1,3 +1,5 @@
+import 'react-native-get-random-values';
+
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
@@ -15,9 +17,9 @@ import QuestionScreen from './app/screens/QuestionScreen';
 import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
-import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import AddFriend from './app/friends/AddFriend';
+
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
@@ -30,12 +32,10 @@ function InsideLayout(assessment) {
       <InsideStack.Screen name="Main Pages" component={List} />
       <InsideStack.Screen name="Details" component={Details} />
       <InsideStack.Screen name="Add Friends" component={AddFriend} />
-      <InsideStack.Screen name="Results">
-        {props => <Results {...props} assessment={assessment} />}
-      </InsideStack.Screen>
-
+      <InsideStack.Screen name="Friends List" component={FriendsList} />
+    <InsideStack.Screen name="Find Friend" component={FindFriend} />
     </InsideStack.Navigator>
-    );
+  );  
 }
 
 
