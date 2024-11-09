@@ -24,5 +24,6 @@ export type Results = {
     emotionalHealth: number;
     alignmentWithGodsHeart: number;
     community: number;
+    overall: number;
     date: string;
 };

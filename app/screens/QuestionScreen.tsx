@@ -26,6 +26,7 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Re
             if (currentQuestionIndex < questions.length - 1) {
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
             } else {
+                const score = results.reduce((acc, result) => acc + result.score, 0) / results.length;
                 const categoryScores = {
                     [Category.serviceAndSacrifice]: 0,
                     [Category.spiritualPractices]: 0,
@@ -45,6 +46,7 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: Re
                     emotionalHealth: categoryScores[Category.emotionalHealth],
                     alignmentWithGodsHeart: categoryScores[Category.alignmentWithGodsHeart],
                     community: categoryScores[Category.community],
+                    overall: score,
                 };
                 questionsFinished(
                     res
