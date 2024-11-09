@@ -2,38 +2,58 @@ import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 
 interface AppButtonProps {
+  variant?: "primary" | "secondary"; // primary or secondary button
   onPress: () => void;
   text: string;
-  align?: "center" | "right";
+  align?: "center" | "right" | "left";
+  showArrow?: boolean;
 }
 
 export const AppButton: React.FC<AppButtonProps> = ({ 
   onPress, 
   text = "I want to get started",  // Default text
-  align = 'center'  // Default alignment
+  align = 'center',  // Default alignment
+  variant = 'primary',  // Default variant
+  showArrow = false
 }) => {
   return (
     <TouchableOpacity 
       style={[
         styles.button, 
-        align === 'right' ? styles.alignRight : styles.alignCenter
+        align === 'right' ? styles.alignRight : align === 'left' ? styles.alignLeft : styles.alignCenter,
+        variant === 'primary' ? styles.primaryButton : styles.secondaryButton,
       ]} 
       onPress={onPress}
     >
       <View style={styles.buttonContent}>
-        <Text style={styles.buttonText}>{text}</Text>
-        <Text style={styles.arrow}>→</Text>
+        <Text 
+          style={[styles.buttonText,
+            variant === 'primary' ? styles.primaryText : styles.secondaryText,
+          ]
+          }>{text}</Text>
+        {showArrow && <Text style={styles.arrow}>→</Text>}
       </View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
+  primaryButton: {
+    backgroundColor: '#658755', // Green
+  },
+  secondaryButton: {
+    backgroundColor: '#E5E7EB',
+  },
+  primaryText: {
+    color: 'white',
+  },
+  secondaryText: {
+    color: '#374151',
+  },
   button: {
     marginTop: 48,
     alignSelf: 'center',
     backgroundColor: '#658755', // Green
-    borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
     shadowColor: '#000',
@@ -42,7 +62,6 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
     elevation: 3,
   },
   alignCenter: {
@@ -51,6 +70,9 @@ const styles = StyleSheet.create({
   alignRight: {
     alignSelf: 'flex-end',
   },
+  alignLeft: {
+    alignSelf: 'flex-start',
+  },
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -58,7 +80,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 16,
     fontFamily: 'Satoshi-Regular',
     fontWeight: '600',
     color: 'white',

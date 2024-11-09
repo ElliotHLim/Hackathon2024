@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import QuestionComponent from '../components/QuestionComponent';
 import { Category, Question, Result, Assessment } from '../types';
 import { questions } from '../data/QuestionList';
+import { screenStyles } from "../styles/screens";
 
 const createResult = (question: Question, answer: number): Result => {
     // submit answer to backend
@@ -63,19 +64,18 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: As
     
 
         return (
-            <View style={styles.container}>
-            <QuestionComponent question={questions[currentQuestionIndex]} submitAnswer={handleNextQuestion} />
+            <View style={screenStyles.container}>
+            <QuestionComponent 
+                key={currentQuestionIndex}
+                question={questions[currentQuestionIndex]} 
+                submitAnswer={handleNextQuestion} 
+            />
             </View>
         );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-    },
+    
 });
 
 export default QuestionScreen;

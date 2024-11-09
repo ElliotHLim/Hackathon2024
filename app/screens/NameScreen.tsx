@@ -1,3 +1,4 @@
+import { screenStyles } from "../styles/screens";
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { AppButton } from "../components/AppButton";
@@ -10,9 +11,10 @@ export const NameScreen: React.FC<NameScreenProps> = ({ navigation }) => {
     const [name, setName] = useState("");
 
     return (
-        <View style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.headerText}>What's your name?</Text>
+        <View style={screenStyles.container}>
+            <View style={screenStyles.content}>
+                <Text style={screenStyles.headerText}>What's your name?</Text>
+                <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
                     value={name}
@@ -20,9 +22,10 @@ export const NameScreen: React.FC<NameScreenProps> = ({ navigation }) => {
                     placeholder="Samantha"
                     placeholderTextColor="#9CA3AF"
                 />
+                </View>
                 <AppButton 
                     text="Next" 
-                    onPress={() => console.log('Next pressed')} 
+                    onPress={() => navigation.navigate('Reflect', { name })} 
                     align="right"
                 />
             </View>
@@ -31,32 +34,26 @@ export const NameScreen: React.FC<NameScreenProps> = ({ navigation }) => {
     };
     
     const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: "white",
-        },
-        content: {
-            flex: 1,
-            paddingHorizontal: 24,
-            paddingVertical: 72,
-            justifyContent: "center",
-            maxWidth: 480,
-            alignSelf: "center",
-            width: "100%",
-        },
-        headerText: {
-            fontSize: 36,
-            fontFamily: "Satoshi-Regular",
-            color: "111827",
+        inputContainer: {
             marginBottom: 24,
+            borderRadius: 8,
+            backgroundColor: 'white',
+            // iOS shadow
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 2,
+                height: 2,
+            },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            // Android shadow
+            elevation: 3,
         },
         input: {
             fontSize: 18,
             borderWidth: 1,
             borderColor: "#E5E7EB",
-            borderRadius: 8,
             fontFamily: 'Satoshi-Regular',
             padding: 16,
-            marginBottom: 24,
         },
     });

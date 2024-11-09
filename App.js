@@ -5,8 +5,6 @@ import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from './FirebaseConfig';
 
 //screens
 import QuestionScreen from './app/screens/QuestionScreen';
@@ -18,16 +16,17 @@ import Register from './app/screens/Register';
 import Results from './app/screens/Results';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
+
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
-import QuestionScreen from './app/screens/QuestionScreen';
-import { WelcomeScreen } from './app/screens/WelcomeScreen';
+
 import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import AddFriend from './app/friends/AddFriend'
 import FriendsList from './app/friends/FriendsList'
 import FindFriend from './app/friends/FindFriend'
+import { ReflectScreen } from './app/screens/ReflectScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -64,6 +63,8 @@ export default function App() {
         console.log('Starting font load...');
         await Font.loadAsync({
           'Satoshi-Regular': require('./assets/fonts/Satoshi/Satoshi-Regular.otf'),
+          'Satoshi-Bold': require('./assets/fonts/Satoshi/Satoshi-Bold.otf'),
+          'Satoshi-Black': require('./assets/fonts/Satoshi/Satoshi-Black.otf'),
         });
         console.log('Fonts loaded successfully');
         setFontsLoaded(true);
@@ -126,9 +127,11 @@ export default function App() {
           <>
           <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
           <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Reflect" component={ReflectScreen} options={{ headerShown: false }} />
           <Stack.Screen name="Questions">
             {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
           </Stack.Screen>
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
           </>
         )}
       </Stack.Navigator>
