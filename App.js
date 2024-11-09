@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
-import List from './app/screens/List'; 
-import Details from './app/screens/Details'; 
+import List from './app/screens/List'; // Adjust path if needed
+import Details from './app/screens/Details'; // Adjust path if needed
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 
@@ -23,15 +23,15 @@ function InsideLayout() {
 }
 
 export default function App() {
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = useState(null); // Initialize without User reference
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user', user); 
+      console.log('user', user);
       setUser(user);
     });
 
-    return () => unsubscribe(); // Clean up the subscription
+    return () => unsubscribe(); // Clean up subscription on unmount
   }, []);
 
   return (
