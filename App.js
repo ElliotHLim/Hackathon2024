@@ -28,7 +28,7 @@ export default function App() {
   const [user, setUser] = useState(null); // Initialize without User reference
   const [loading, setLoading] = useState(true); // Track loading state
 
-  useEffect(() => {
+  React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
       setLoading(false); // Stop loading once user state is determined
