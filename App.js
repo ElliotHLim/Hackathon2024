@@ -18,26 +18,35 @@ import Register from './app/screens/Register';
 import Results from './app/screens/Results';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
-
+import { onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
+import QuestionScreen from './app/screens/QuestionScreen';
+import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import AddFriend from './app/friends/AddFriend';
+import AddFriend from './app/friends/AddFriend'
+import FriendsList from './app/friends/FriendsList'
+import FindFriend from './app/friends/FindFriend'
 
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
 
 // InsideLayout for authenticated users
-function InsideLayout(assessment) {
-  console.log('assessment', assessment);
+function InsideLayout(props1) {
+  console.log('assessment insidelayout', props1.assessment);
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="Main Pages" component={List} />
       <InsideStack.Screen name="Details" component={Details} />
-      <InsideStack.Screen name="Add Friends" component={AddFriend} />
+      <InsideStack.Screen name="Results">
+        {props => <Results {...props} assessment={props1.assessment} />}
+      </InsideStack.Screen>
+
+      {/* <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Friends List" component={FriendsList} />
-    <InsideStack.Screen name="Find Friend" component={FindFriend} />
+    <InsideStack.Screen name="Find Friend" component={FindFriend} /> */}
     </InsideStack.Navigator>
   );  
 }
