@@ -17,14 +17,10 @@ import Register from './app/screens/Register';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
 import QuestionScreen from './app/screens/QuestionScreen';
-import * as Font from 'expo-font';
 import AddFriend from './app/friends/AddFriend';
 import FriendsList from './app/friends/FriendsList';
 import FindFriend from './app/friends/FindFriend';
 import * as Font from 'expo-font';
-import { doc, setDoc } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
-import AddFriend from './app/friends/AddFriend'
 import PastResults from './app/screens/PastResults';
 import Results from './app/screens/Results';
 import { ReflectScreen } from './app/screens/ReflectScreen';
