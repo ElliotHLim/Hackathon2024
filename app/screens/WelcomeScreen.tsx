@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { WelcomeMessage } from "../components/WelcomeMessage";
 import { AppButton } from "../components/AppButton";
 
+
 interface WelcomeScreenProps {
   appName?: string;  // Made optional with default value in component
   navigation: any;

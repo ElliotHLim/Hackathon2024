@@ -1,48 +1,43 @@
 import 'react-native-get-random-values';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 
-//screens
+// Screens
 import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import { NameScreen } from './app/screens/NameScreen';
-import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
 import QuestionScreen from './app/screens/QuestionScreen';
+import * as Font from 'expo-font';
+import AddFriend from './app/friends/AddFriend';
 import FriendsList from './app/friends/FriendsList';
 import FindFriend from './app/friends/FindFriend';
-import * as Font from 'expo-font';
-import { doc, setDoc } from 'firebase/firestore';
-import { v4 as uuidv4 } from 'uuid';
-import AddFriend from './app/friends/AddFriend'
-import FriendsList from './app/friends/FriendsList'
-import FindFriend from './app/friends/FindFriend'
+import Results from './app/screens/Results'; // Ensure you import Results here
 
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
 
-// InsideLayout for authenticated users
-function InsideLayout(props1) {
-  console.log('assessment insidelayout', props1.assessment);
+function InsideLayout({ assessment }) {
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="Main Pages" component={List} />
       <InsideStack.Screen name="Details" component={Details} />
+      <InsideStack.Screen name="AddFriends" component={AddFriend} />
+      <InsideStack.Screen name="FindFriends" component={FindFriend} />
+      <InsideStack.Screen name="FriendsList" component={FriendsList} />
       <InsideStack.Screen name="Results">
-        {props => <Results {...props} assessment={props1.assessment} />}
+        {(props) => <Results {...props} assessment={assessment} />}
       </InsideStack.Screen>
-
-      {/* <InsideStack.Screen name="Add Friends" component={AddFriend} />
-      <InsideStack.Screen name="Friends List" component={FriendsList} />
-    <InsideStack.Screen name="Find Friend" component={FindFriend} /> */}
     </InsideStack.Navigator>
   );
 }
@@ -61,7 +56,7 @@ export default function App() {
         setFontsLoaded(true);
       } catch (error) {
         console.error('Error loading fonts:', error);
-        setFontsLoaded(true);
+        setFontsLoaded(true);  // Proceed even if fonts don't load
       }
     };
 
@@ -102,11 +97,12 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
           <>
-          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{headerShown: false}} />
-          <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Questions">
-            {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
-          </Stack.Screen>
+            <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Questions">
+              {(props) => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
+            </Stack.Screen>
+          </>
         )}
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
       </Stack.Navigator>
@@ -119,11 +115,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
   },
 });
