@@ -1,17 +1,22 @@
+import 'react-native-get-random-values';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from './FirebaseConfig';
+
+//screens
+import QuestionScreen from './app/screens/QuestionScreen';
+import { WelcomeScreen } from './app/screens/WelcomeScreen';
+import { NameScreen } from './app/screens/NameScreen';
 import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import Register from './app/screens/Register';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
-import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from './FirebaseConfig';
-import QuestionScreen from './app/screens/QuestionScreen';
-import { WelcomeScreen } from './app/screens/WelcomeScreen';
+
 import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import 'react-native-get-random-values';
@@ -29,7 +34,6 @@ function InsideLayout() {
       <InsideStack.Screen name="Details" component={Details} />
     </InsideStack.Navigator>
     );
-  }
 }
 
 export default function App() {
@@ -96,21 +100,15 @@ export default function App() {
 
   // Main app render
   return (
-    <WelcomeScreen />
-    /* <NavigationContainer>
-      <Stack.Navigator>
-        {user ? (
-          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
-        ) : answeredQuestions ? (
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen name="Questions">
-            {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
-          </Stack.Screen>
-        )}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Name" component={NameScreen} options={{ headerShown: false }} />
+      {/* Other screens */}
       </Stack.Navigator>
-    </NavigationContainer> */
-  );
+      </NavigationContainer>
+    );
+  }
 
 
 const styles = StyleSheet.create({
