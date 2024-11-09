@@ -11,8 +11,10 @@ import Register from './app/screens/Register';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
 import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
+import { FIREBASE_AUTH } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
+import { WelcomeScreen } from './app/screens/WelcomeScreen';
+import * as Font from 'expo-font';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import AddFriend from './app/friends/AddFriend';
@@ -21,11 +23,11 @@ import AddFriend from './app/friends/AddFriend';
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
 
-// InsideLayout for authenticated users
 function InsideLayout() {
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen name="Main Page" component={List} />
+      <InsideStack.Screen name="Main Pages" component={List} />
+      <InsideStack.Screen name="Add Friends" component={Details} />
       <InsideStack.Screen name="Details" component={Details} />
       <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Friends List" component={FriendsList} />
@@ -37,11 +39,29 @@ function InsideLayout() {
 export default function App() {
   const [user, setUser] = useState(null);
   const [answeredQuestions, setAnsweredQuestions] = useState(null);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  // First useEffect for font loading
   useEffect(() => {
-    console.log('answeredQuestions', answeredQuestions);
-  }, [answeredQuestions]);
+    const loadFonts = async () => {
+      try {
+        console.log('Starting font load...');
+        await Font.loadAsync({
+          'Satoshi-Regular': require('./assets/fonts/Satoshi/Satoshi-Regular.otf'),
+        });
+        console.log('Fonts loaded successfully');
+        setFontsLoaded(true);
+      } catch (error) {
+        console.error('Error loading fonts:', error);
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        setFontsLoaded(true);
+      }
+    };
 
+    loadFonts();
+  }, []); // Empty dependency array as this should only run once
+
+  // Second useEffect for user and assessment handling
   useEffect(() => {
     console.log('user', user);
     if (answeredQuestions && user) {
@@ -54,41 +74,48 @@ export default function App() {
         results: answeredQuestions,
       });
     }
-  }, [user]);
+  }, [user, answeredQuestions]); // Added answeredQuestions to dependencies
 
+  // Set up auth listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
       if (answeredQuestions && user) {
         console.log('answeredQuestions', answeredQuestions);
+        // add new user results to firebase (results table)
       }
     });
 
-    return () => unsubscribe();
-  }, [answeredQuestions]);
+    return () => unsubscribe(); // Clean up subscription on unmount
+  }, []); // Empty dependency array means this only runs once on mount
 
+  // Show loading screen while fonts are loading
+  if (!fontsLoaded) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  // Main app render
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <WelcomeScreen />
+    /* <NavigationContainer>
+      <Stack.Navigator>
         {user ? (
-          // If user is authenticated, show InsideLayout
-          <Stack.Screen name="Inside" component={InsideLayout} />
+          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
         ) : answeredQuestions ? (
-          // If questions are answered but not logged in, show Login screen
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
-          // If user hasn't answered questions yet, show QuestionScreen
           <Stack.Screen name="Questions">
             {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
           </Stack.Screen>
         )}
-
-        {/* Add Register screen to navigation */}
-        <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
-    </NavigationContainer>
+    </NavigationContainer> */
   );
-}
+
 
 const styles = StyleSheet.create({
   loading: {
