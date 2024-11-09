@@ -7,6 +7,7 @@ import HomeScreen from './pages/HomeScreen';
 import Login from './app/screens/Login';
 import List from './app/screens/List'; // Adjust path if needed
 import Details from './app/screens/Details'; // Adjust path if needed
+import QuestionScreen from './app/screens/QuestionScreen';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 
@@ -35,7 +36,8 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
+    <QuestionScreen />
+    /* <NavigationContainer>
       <Stack.Navigator>
         {user ? (
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
@@ -43,7 +45,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         )}
       </Stack.Navigator>
-    </NavigationContainer>
+    </NavigationContainer> */
   );
 }
 
