@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, View, StyleSheet, Dimensions } from 'react-native';
-import SpiritualHealthScreen from './SpiritualHealthScreen';
+import SpiritualHealthScreen from '../components/SpiritualHealthScreen';
 
 
 // create multiple sprituial health screens, each with data from an array
