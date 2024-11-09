@@ -1,19 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
-import Login from './app/screens/Login';
-import List from './app/screens/List'; // Adjust path if needed
-import Details from './app/screens/Details'; // Adjust path if needed
+import Login from './app/screens/Login';  // Ensure path is correct
+import Register from './app/screens/Register';  // Ensure path is correct
+import List from './app/screens/List'; // Ensure path is correct
+import Details from './app/screens/Details'; // Ensure path is correct
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
 
 const Stack = createNativeStackNavigator();
-
 const InsideStack = createNativeStackNavigator();
+
+// InsideLayout for authenticated users
 function InsideLayout() {
   return (
     <InsideStack.Navigator>
@@ -33,7 +35,6 @@ export default function App() {
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('user', user);
       setUser(user);
       if (answeredQuestions && user) {
         console.log('answeredQuestions', answeredQuestions);
@@ -50,6 +51,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {user ? (
+          // If user is logged in, show the authenticated user flow (InsideLayout)
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
@@ -64,6 +66,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
