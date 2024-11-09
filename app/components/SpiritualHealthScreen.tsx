@@ -4,6 +4,7 @@ import Circle from './Circle';
 import ColorHash from 'color-hash';
 import { Result } from '../types';
 
+
 const SpiritualHealthScreen = ( result: Result ) => { // default score for demo
   var colorHash = new ColorHash({lightness: 0.3, hue: {min: 180, max: 280}});
 

@@ -1,18 +1,46 @@
-import React from 'react';
-import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Button, TextInput, StyleSheet, Alert } from 'react-native';
+import { FIREBASE_AUTH } from '../../FirebaseConfig';  // Make sure to import Firebase authentication
+
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = ({ navigation }: any) => {
-  const handleLogin = () => {
-    // Handle login logic here
-    // After successful login, you can navigate to another screen
-    navigation.navigate('Home'); // Replace 'Home' with your desired screen
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password');
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
+      // After successful login, navigate to the Home screen (or another screen)
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error('Error logging in:', error);
+      Alert.alert('Login Failed', error.message);
+    }
   };
 
   return (
     <View style={styles.container}>
       <Text>Login Screen</Text>
-      <TextInput placeholder="Username" style={styles.input} />
-      <TextInput placeholder="Password" style={styles.input} secureTextEntry />
+      <TextInput
+        placeholder="Email"
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+      />
+      <TextInput
+        placeholder="Password"
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
       <Button title="Login" onPress={handleLogin} />
       <Button
         title="Go to Register"

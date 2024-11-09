@@ -13,6 +13,10 @@ import { FIREBASE_AUTH } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
 import { WelcomeScreen } from './app/screens/WelcomeScreen';
 import * as Font from 'expo-font';
+import { doc, setDoc, collection } from 'firebase/firestore';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+import AddFriend from './app/friends/AddFriend';
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
@@ -20,10 +24,12 @@ const InsideStack = createNativeStackNavigator();
 function InsideLayout() {
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen name="My todos" component={List} />
+      <InsideStack.Screen name="Main Pages" component={List} />
+      <InsideStack.Screen name="Add Friends" component={Details} />
       <InsideStack.Screen name="Details" component={Details} />
     </InsideStack.Navigator>
-  );
+    );
+  }
 }
 
 export default function App() {
@@ -31,24 +37,43 @@ export default function App() {
   const [answeredQuestions, setAnsweredQuestions] = useState(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  // First useEffect for font loading
   useEffect(() => {
-    // Load fonts and set up auth listener in parallel
     const loadFonts = async () => {
       try {
+        console.log('Starting font load...');
         await Font.loadAsync({
           'Satoshi-Regular': require('./assets/fonts/Satoshi/Satoshi-Regular.otf'),
-          // Add other font weights as needed
         });
+        console.log('Fonts loaded successfully');
         setFontsLoaded(true);
       } catch (error) {
         console.error('Error loading fonts:', error);
-        setFontsLoaded(true); // Still set to true so app can run with system fonts
+        console.error('Error details:', JSON.stringify(error, null, 2));
+        setFontsLoaded(true);
       }
     };
 
     loadFonts();
+  }, []); // Empty dependency array as this should only run once
 
-    // Set up auth listener
+  // Second useEffect for user and assessment handling
+  useEffect(() => {
+    console.log('user', user);
+    if (answeredQuestions && user) {
+      console.log('answeredQuestions', answeredQuestions, 'user', user);
+      // add new user results to firebase (results table)
+      const db = FIRESTORE_DB;
+      const assessmentRef = doc(db, 'assessments', uuidv4());
+      setDoc(assessmentRef, {
+        userId: user.uid,
+        results: answeredQuestions,
+      });
+    }
+  }, [user, answeredQuestions]); // Added answeredQuestions to dependencies
+
+  // Set up auth listener
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
       if (answeredQuestions && user) {
@@ -71,7 +96,7 @@ export default function App() {
 
   // Main app render
   return (
-    <WelcomeScreen appName='Waypoint'/>
+    <WelcomeScreen />
     /* <NavigationContainer>
       <Stack.Navigator>
         {user ? (
@@ -86,7 +111,7 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer> */
   );
-}
+
 
 const styles = StyleSheet.create({
   loading: {
