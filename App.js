@@ -22,8 +22,8 @@ import * as Font from 'expo-font';
 import { doc, setDoc } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import AddFriend from './app/friends/AddFriend'
-import FriendsList from './app/friends/FriendsList'
-import FindFriend from './app/friends/FindFriend'
+import PastResults from './app/screens/PastResults';
+import Results from './app/screens/Results';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +39,7 @@ function InsideLayout(props1) {
       <InsideStack.Screen name="Results">
         {props => <Results {...props} assessment={props1.assessment} />}
       </InsideStack.Screen>
+      <InsideStack.Screen name="PastResults" component={PastResults} />
 
       {/* <InsideStack.Screen name="Add Friends" component={AddFriend} />
       <InsideStack.Screen name="Friends List" component={FriendsList} />
@@ -107,6 +108,7 @@ export default function App() {
           <Stack.Screen name="Questions">
             {props => <QuestionScreen {...props} questionsFinished={setAnsweredQuestions} />}
           </Stack.Screen>
+          </>
         )}
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
       </Stack.Navigator>
