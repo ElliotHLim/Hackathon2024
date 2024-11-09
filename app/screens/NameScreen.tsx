@@ -22,7 +22,7 @@ export const NameScreen: React.FC<NameScreenProps> = ({ navigation }) => {
                 />
                 <AppButton 
                     text="Next" 
-                    onPress={() => console.log('Next pressed')} 
+                    onPress={() => navigation.navigate('Questions')} 
                     align="right"
                 />
             </View>
