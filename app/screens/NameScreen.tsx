@@ -56,4 +56,4 @@ export const NameScreen: React.FC<NameScreenProps> = ({ navigation }) => {
             fontFamily: 'Satoshi-Regular',
             padding: 16,
         },
-    });g
+    });
