@@ -18,7 +18,6 @@ import Register from './app/screens/Register';
 import Results from './app/screens/Results';
 import List from './app/screens/List';
 import Details from './app/screens/Details';
-import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
 import { WelcomeScreen } from './app/screens/WelcomeScreen';
