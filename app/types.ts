@@ -19,5 +19,11 @@ export type Result = {
 
 export type Results = {
     results: Result[];
+    serviceAndSacrifice: number;
+    spiritualPractices: number;
+    emotionalHealth: number;
+    alignmentWithGodsHeart: number;
+    community: number;
+    overall: number;
     date: string;
 };

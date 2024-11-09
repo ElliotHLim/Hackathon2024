@@ -1,88 +1,42 @@
-import { View, TextInput, StyleSheet, ActivityIndicator, Button } from 'react-native';
-import React, { useState } from 'react';
-import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import React from 'react';
+import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 
-const Login = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const auth = FIREBASE_AUTH;
+const Login = ({ navigation }: any) => {
+  const handleLogin = () => {
+    // Handle login logic here
+    // After successful login, you can navigate to another screen
+    navigation.navigate('Home'); // Replace 'Home' with your desired screen
+  };
 
-    const signIn = async () => {
-        setLoading(true);
-        try {
-            const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response);
-        } 
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    const signUp = async () => {
-        setLoading(true);
-        try {
-            const response = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(response);
-            alert('Check your email!');
-        }
-        catch(error) {
-            console.log(error);
-            alert('Sign up failed: ' + error.message);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
-    return (
-        <View style={styles.container}>
-            <TextInput 
-                value={email} 
-                style={styles.input} 
-                placeholder="Email" 
-                autoCapitalize="none" 
-                onChangeText={(text) => setEmail(text)} 
-            />
-            <TextInput 
-                secureTextEntry={true} 
-                value={password} 
-                style={styles.input} 
-                placeholder="Password" 
-                autoCapitalize="none" 
-                onChangeText={(text) => setPassword(text)} 
-            />
-            {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-                <>
-                    <Button title="Login" onPress={signIn} />
-                    <Button title="Create account" onPress={signUp} />
-                </>
-            )}
-        </View>
-    );
+  return (
+    <View style={styles.container}>
+      <Text>Login Screen</Text>
+      <TextInput placeholder="Username" style={styles.input} />
+      <TextInput placeholder="Password" style={styles.input} secureTextEntry />
+      <Button title="Login" onPress={handleLogin} />
+      <Button
+        title="Go to Register"
+        onPress={() => navigation.navigate('Register')}
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 16,
-    },
-    input: {
-        width: '100%',
-        padding: 10,
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 5,
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 12,
+    paddingHorizontal: 8,
+  },
 });
 
 export default Login;

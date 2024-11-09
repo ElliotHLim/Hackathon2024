@@ -23,10 +23,18 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.WheatonCollege.HealthTracker"
+      "package": "com.anonymous.Hackathon2024"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": [
+      {
+        "asset": "./assets/fonts/Satoshi/Satoshi-Regular.otf"
+      }
+    ],
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
