@@ -38,6 +38,19 @@ const QuestionScreen = ({ questionsFinished }: { questionsFinished: (results: As
             categoryScores[Category.serviceAndSacrifice] /= questions.filter(
                 question => question.category === Category.serviceAndSacrifice
             ).length;
+            categoryScores[Category.spiritualPractices] /= questions.filter(
+                question => question.category === Category.spiritualPractices
+            ).length;
+            categoryScores[Category.emotionalHealth] /= questions.filter(
+                question => question.category === Category.emotionalHealth
+            ).length;
+            categoryScores[Category.alignmentWithGodsHeart] /= questions.filter(
+                question => question.category === Category.alignmentWithGodsHeart
+            ).length;
+            categoryScores[Category.community] /= questions.filter(
+                question => question.category === Category.community
+            ).length;
+            
 
             const res: Assessment = {
                 results: results,

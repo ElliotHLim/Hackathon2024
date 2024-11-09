@@ -101,7 +101,9 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Welcome">
         {user ? (
-          <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false }} />
+          <Stack.Screen name="Inside"  options={{ headerShown: false }}>
+            {props => <InsideLayout {...props} assessment={answeredQuestions} />}
+          </Stack.Screen>
         ) : answeredQuestions ? (
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         ) : (
