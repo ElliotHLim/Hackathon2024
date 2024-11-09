@@ -9,8 +9,11 @@ import Register from './app/screens/Register';  // Ensure path is correct
 import List from './app/screens/List'; // Ensure path is correct
 import Details from './app/screens/Details'; // Ensure path is correct
 import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from './FirebaseConfig';
+import { FIREBASE_AUTH, FIRESTORE_DB } from './FirebaseConfig';
 import QuestionScreen from './app/screens/QuestionScreen';
+import { doc, setDoc, collection } from 'firebase/firestore';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
@@ -33,12 +36,25 @@ export default function App() {
     console.log('answeredQuestions', answeredQuestions);
   }, [answeredQuestions]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    console.log('user', user);
+    if (answeredQuestions && user) {
+      console.log('answeredQuestions', answeredQuestions, 'user', user);
+      // add new user results to firebase (results table)
+      const db = FIRESTORE_DB;
+      const assessmentRef = doc(db, 'assessments', uuidv4());
+      setDoc(assessmentRef, {
+        userId: user.uid,
+        results: answeredQuestions,
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
       setUser(user);
       if (answeredQuestions && user) {
         console.log('answeredQuestions', answeredQuestions);
-        // add new user results to firebase (results table)
       }
     });
 
